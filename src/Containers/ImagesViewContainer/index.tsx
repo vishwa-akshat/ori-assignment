@@ -1,42 +1,71 @@
+import { useState, useEffect } from "react";
+
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Layout, Row, Col, Spin, Image } from "antd";
 
 import "./style.scss";
-
-type Props = {
-    imageData: Array<object> | undefined;
-};
+import ImageLoading from "../../Components/ImageLoading";
 
 const { Content } = Layout;
 
-export default function ImagesViewContainer({ imageData }: Props) {
+export default function ImagesViewContainer() {
+    const [imageData, setImageData] = useState([]);
+    const [page, setPage] = useState(1);
+
+    async function loadPhotos() {
+        const response = await fetch(
+            `https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=1fa1ad581283d237f293fd30527181fb&page=${page}&per_page=10&format=json&nojsoncallback=1`
+        );
+        const json = await response.json();
+        const datap = await json.photos;
+        const photo = await datap.photo;
+        setImageData([...imageData, ...photo]);
+    }
+
+    useEffect(() => {
+        loadPhotos();
+    }, [page]);
+
+    function handleLoadMore() {
+        setPage((page) => page + 1);
+    }
+
     if (!imageData) return <Spin />;
 
     return (
         <Content className="image-view-container">
-            <Row
-                align="middle"
-                justify="center"
-                gutter={[
-                    { xs: 8, sm: 16, md: 24, lg: 32 },
-                    { xs: 8, sm: 16, md: 24, lg: 32 },
-                ]}
+            <InfiniteScroll
+                dataLength={imageData.length}
+                next={() => handleLoadMore()}
+                hasMore={page < 100}
+                loader={<ImageLoading />}
             >
-                {imageData.map((image) => {
-                    const imgSrc = `https://live.staticflickr.com/${image?._attributes?.server}/${image?._attributes?.id}_${image?._attributes?.secret}.jpg`;
+                <Row
+                    align="middle"
+                    justify="center"
+                    gutter={[
+                        { xs: 8, sm: 16, md: 24, lg: 32 },
+                        { xs: 8, sm: 16, md: 24, lg: 32 },
+                    ]}
+                >
+                    {imageData?.map((image) => {
+                        const imgSrc = `https://live.staticflickr.com/${image?.server}/${image?.id}_${image?.secret}.jpg`;
 
-                    return (
-                        <Col
-                            className="image-wrapper"
-                            xs={32}
-                            sm={24}
-                            md={16}
-                            lg={8}
-                        >
-                            <Image className="image" src={imgSrc} />
-                        </Col>
-                    );
-                })}
-            </Row>
+                        return (
+                            <Col
+                                key={image?.id}
+                                className="image-wrapper"
+                                xs={32}
+                                sm={24}
+                                md={16}
+                                lg={8}
+                            >
+                                <Image className="image" src={imgSrc} />
+                            </Col>
+                        );
+                    })}
+                </Row>
+            </InfiniteScroll>
         </Content>
     );
 }
