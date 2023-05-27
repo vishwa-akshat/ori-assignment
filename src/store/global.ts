@@ -3,6 +3,7 @@ import { create } from "zustand";
 import StoreState from "./types";
 
 export const useStore = create<StoreState>((set, get) => ({
+    isLoading: false,
     page: 1,
     imageData: [],
     searchInput: null,
@@ -30,10 +31,12 @@ export const useStore = create<StoreState>((set, get) => ({
     emptyImageData: () => set({ imageData: [] }),
     setPage: (value) => set({ page: value }),
     loadPhotos: async () => {
+        set({ isLoading: true });
         const response = await fetch(get().getUrl());
         const json = await response.json();
         const datap = await json.photos;
         const photo = await datap.photo;
         get().setImageData(photo);
+        set({ isLoading: false });
     },
 }));
