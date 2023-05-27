@@ -1,9 +1,10 @@
 import { Row, Col, Skeleton } from "antd";
-import React from "react";
 
 import "./style.scss";
 
 export default function ImageLoading() {
+    const blankLoaderShells = ["", "", "", "", "", ""];
+
     return (
         <Row
             align="middle"
@@ -14,60 +15,19 @@ export default function ImageLoading() {
             ]}
             className="loader-wrapper"
         >
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
-            <Col
-                className="skeleton-image-wrapper"
-                xs={32}
-                sm={24}
-                md={12}
-                lg={8}
-            >
-                <Skeleton.Image className="skeleton-image" active />
-            </Col>
+            {blankLoaderShells.map(() => {
+                return (
+                    <Col
+                        className="skeleton-image-wrapper"
+                        xs={32}
+                        sm={24}
+                        md={12}
+                        lg={8}
+                    >
+                        <Skeleton.Image className="skeleton-image" active />
+                    </Col>
+                );
+            })}
         </Row>
     );
 }
