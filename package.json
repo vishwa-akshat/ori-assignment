@@ -18,6 +18,7 @@
         "react-dom": "^18.2.0",
         "sass": "^1.62.1",
         "stream-browserify": "^3.0.0",
+        "swr": "^2.1.5",
         "util": "^0.12.5",
         "vite-plugin-xml-loader": "^1.0.2",
         "xml-js": "^1.6.11"
