@@ -11,6 +11,7 @@ interface imageType {
 }
 
 export default interface StoreState {
+    isLoading: boolean;
     page: number;
     searchInput: string | null;
     suggestions: Array<string>;

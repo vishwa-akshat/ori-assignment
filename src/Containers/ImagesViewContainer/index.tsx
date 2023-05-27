@@ -16,6 +16,7 @@ export default function ImagesViewContainer() {
     const page = useStore((state) => state.page);
     const setPage = useStore((state) => state.setPage);
     const searchInput = useStore((state) => state.searchInput);
+    const isLoading = useStore((state) => state.isLoading);
 
     useEffect(() => {
         loadPhotos();
@@ -25,7 +26,7 @@ export default function ImagesViewContainer() {
         setPage(page + 1);
     }
 
-    if (imageData.length === 0) {
+    if (imageData.length === 0 && !isLoading) {
         return (
             <Result
                 status="404"
