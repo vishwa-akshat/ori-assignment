@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Layout, Row, Col, Spin, Image } from "antd";
+import { Layout, Row, Col, Result, Image } from "antd";
 
 import "./style.scss";
 import ImageLoading from "../../Components/ImageLoading";
@@ -15,16 +15,25 @@ export default function ImagesViewContainer() {
     const loadPhotos = useStore((state) => state.loadPhotos);
     const page = useStore((state) => state.page);
     const setPage = useStore((state) => state.setPage);
+    const searchInput = useStore((state) => state.searchInput);
 
     useEffect(() => {
         loadPhotos();
-    }, [page]);
+    }, [page, searchInput]);
 
     function handleLoadMore() {
         setPage(page + 1);
     }
 
-    if (!imageData) return <Spin />;
+    if (imageData.length === 0) {
+        return (
+            <Result
+                status="404"
+                title="0 Photos Found"
+                subTitle="Sorry, no photos found with that search."
+            />
+        );
+    }
 
     return (
         <Content className="image-view-container">
